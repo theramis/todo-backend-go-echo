@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"log"
-	"net/http"
 	"os"
 )
 
@@ -14,8 +14,13 @@ func main() {
 	}
 
 	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+	e.Pre(middleware.RemoveTrailingSlash())
+	e.Use(middleware.Logger())
+	e.Use(middleware.CORS())
+	e.Use(middleware.Recover())
+
+	e.GET("/todos", getAllTodosHandler)
+	e.POST("/todos", createTodoHandler)
+
 	e.Logger.Fatal(e.Start(":" + port))
 }
