@@ -1,8 +1,13 @@
 package main
 
+import "errors"
+
 type TodoRepository interface {
 	Create(todo *Todo)
 	GetAll() []*Todo
+	Get(id int) (t *Todo, err error)
+	DeleteAll()
+	Delete(id int) (err error)
 }
 
 type InMemoryTodoRepository struct {
@@ -25,4 +30,27 @@ func (r *InMemoryTodoRepository) Create(todo *Todo) {
 
 func (r *InMemoryTodoRepository) GetAll() []*Todo {
 	return r.Todos
+}
+
+func (r *InMemoryTodoRepository) DeleteAll() {
+	r.Todos = make([]*Todo, 0)
+}
+
+func (r *InMemoryTodoRepository) Get(id int) (t *Todo, err error) {
+	for _, t = range r.Todos {
+		if t.Id == id {
+			return t, nil
+		}
+	}
+	return nil, errors.New("todo not found")
+}
+
+func (r *InMemoryTodoRepository) Delete(id int) (err error) {
+	for i, t := range r.Todos {
+		if t.Id == id {
+			r.Todos = append(r.Todos[:i], r.Todos[i+1:]...)
+			return nil
+		}
+	}
+	return errors.New("todo not found")
 }

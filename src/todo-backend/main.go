@@ -21,6 +21,10 @@ func main() {
 
 	e.GET("/todos", getAllTodosHandler)
 	e.POST("/todos", createTodoHandler)
+	e.DELETE("/todos", deleteAllTodosHandler)
+
+	e.GET("/todos/:id", getTodoHandler)
+	e.DELETE("/todos/:id", deleteTodoHandler)
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
