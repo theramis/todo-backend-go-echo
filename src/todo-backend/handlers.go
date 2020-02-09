@@ -68,7 +68,7 @@ func updateTodoHandler(c echo.Context) (err error) {
 		if err := todoRepository.Update(todo); err != nil {
 			return c.String(http.StatusNotFound, "Todo note was not found")
 		} else {
-			return c.NoContent(http.StatusNoContent)
+			return c.JSON(http.StatusOK, todo)
 		}
 	}
 }
