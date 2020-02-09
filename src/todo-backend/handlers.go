@@ -53,6 +53,26 @@ func deleteTodoHandler(c echo.Context) (err error) {
 	}
 }
 
+func updateTodoHandler(c echo.Context) (err error) {
+	if id, err := getTodoId(c); err != nil {
+		return err
+	} else {
+		todo, err := todoRepository.Get(id)
+		if err != nil {
+			return c.String(http.StatusNotFound, "Todo note was not found")
+		}
+		if err = c.Bind(todo); err != nil {
+			return err
+		}
+
+		if err := todoRepository.Update(todo); err != nil {
+			return c.String(http.StatusNotFound, "Todo note was not found")
+		} else {
+			return c.NoContent(http.StatusNoContent)
+		}
+	}
+}
+
 func getTodoId(c echo.Context) (id int, err error) {
 	rawId := c.Param("id")
 	id, err = strconv.Atoi(rawId)

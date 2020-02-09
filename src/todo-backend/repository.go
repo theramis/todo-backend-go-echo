@@ -6,6 +6,7 @@ type TodoRepository interface {
 	Create(todo *Todo)
 	GetAll() []*Todo
 	Get(id int) (t *Todo, err error)
+	Update(*Todo) (err error)
 	DeleteAll()
 	Delete(id int) (err error)
 }
@@ -49,6 +50,16 @@ func (r *InMemoryTodoRepository) Delete(id int) (err error) {
 	for i, t := range r.Todos {
 		if t.Id == id {
 			r.Todos = append(r.Todos[:i], r.Todos[i+1:]...)
+			return nil
+		}
+	}
+	return errors.New("todo not found")
+}
+
+func (r *InMemoryTodoRepository) Update(todo *Todo) (err error) {
+	for i, t := range r.Todos {
+		if t.Id == todo.Id {
+			r.Todos[i] = todo
 			return nil
 		}
 	}

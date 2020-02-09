@@ -25,6 +25,7 @@ func main() {
 
 	e.GET("/todos/:id", getTodoHandler)
 	e.DELETE("/todos/:id", deleteTodoHandler)
+	e.PATCH("/todos/:id", updateTodoHandler)
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
